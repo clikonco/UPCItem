@@ -25,7 +25,8 @@ public final class R {
     }
     public static final class id {
         public static final int ScanButton=0x7f080002;
-        public static final int action_settings=0x7f080003;
+        public static final int action_settings=0x7f080004;
+        public static final int button1=0x7f080003;
         public static final int cameraPreview=0x7f080000;
         public static final int scanText=0x7f080001;
     }

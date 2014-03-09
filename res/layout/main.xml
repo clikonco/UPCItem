@@ -26,4 +26,13 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
   />
+  
+  <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:layout_gravity="center"
+        android:onClick="onSearchClick"
+        android:layout_marginTop="10dp" />
 </LinearLayout>

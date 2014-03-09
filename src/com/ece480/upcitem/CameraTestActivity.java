@@ -12,6 +12,7 @@ import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -20,6 +21,7 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,11 +49,16 @@ public class CameraTestActivity extends Activity
     } 
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        super.onCreate(savedInstanceState);      
         setContentView(R.layout.main);
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        scanText = (TextView)findViewById(R.id.scanText);
+        scanButton = (Button)findViewById(R.id.ScanButton);
+        start();
+    }
+    
+    private void start(){
+    	
 
         autoFocusHandler = new Handler();
         mCamera = getCameraInstance();
@@ -65,9 +72,7 @@ public class CameraTestActivity extends Activity
         FrameLayout preview = (FrameLayout)findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
-        scanText = (TextView)findViewById(R.id.scanText);
-
-        scanButton = (Button)findViewById(R.id.ScanButton);
+        
 
         scanButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -88,6 +93,11 @@ public class CameraTestActivity extends Activity
         releaseCamera();
     }
 
+   
+  
+    
+  
+    
     /** A safe way to get an instance of the Camera object. */
     public static Camera getCameraInstance(){
         Camera c = null;
@@ -98,6 +108,10 @@ public class CameraTestActivity extends Activity
         return c;
     }
 
+    
+   
+    
+    
     private void releaseCamera() {
         if (mCamera != null) {
             previewing = false;
@@ -133,6 +147,7 @@ public class CameraTestActivity extends Activity
                     for (Symbol sym : syms) {
                         scanText.setText("barcode result " + sym.getData());
                         scannedinfo = sym.getData();
+                        Log.d("Barcode Scanned: ", scannedinfo);
                         //Intent i = new Intent(CameraTest.this,Result.class);
                         //i.putExtra("scannedinfo", scannedinfo);
                         barcodeScanned = true;
@@ -147,4 +162,20 @@ public class CameraTestActivity extends Activity
                 autoFocusHandler.postDelayed(doAutoFocus, 1000);
             }
         };
+        
+        
+     //if search button clicked, search for UPC   
+    public void onSearchClick(View v)
+    {
+    	try {
+    		 Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+             //String term = editTextInput.getText().toString();
+    		 Log.d("Search Interwebz: ", scannedinfo);
+             intent.putExtra(SearchManager.QUERY, scannedinfo);
+             startActivity(intent);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+    	
+    }
 }
