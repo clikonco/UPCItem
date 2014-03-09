@@ -30,7 +30,7 @@ import android.widget.TextView;
 /* Import ZBar Class files */
 
 
-public class CameraTestActivity extends Activity
+public class CameraScanActivity extends Activity
 {
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -93,7 +93,10 @@ public class CameraTestActivity extends Activity
         releaseCamera();
     }
 
-   
+   public void onResume(){
+	   super.onResume();
+	   mCamera = Camera.open();
+   }
   
     
   
