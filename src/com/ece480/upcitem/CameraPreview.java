@@ -51,20 +51,31 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
 
         // deprecated setting, but required on Android versions prior to 3.0
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        //mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
-        try {
+        if(mCamera == null){
+        	mCamera = Camera.open();
+        }
+    	try {
             mCamera.setPreviewDisplay(holder);
         } catch (IOException e) {
             Log.d("DBG", "Error setting camera preview: " + e.getMessage());
+            mCamera.release();
+            mCamera = null;
         }
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // Camera preview released in activity
+    	 if(mCamera!=null){
+             mCamera.stopPreview();
+             mCamera.setPreviewCallback(null);
+             mCamera.release();
+             mCamera = null;
+         }
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -96,4 +107,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.d("DBG", "Error starting camera preview: " + e.getMessage());
         }
     }
+    
+    
 }

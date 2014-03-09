@@ -56,10 +56,24 @@ public class CameraScanActivity extends Activity
         scanButton = (Button)findViewById(R.id.ScanButton);
         start();
     }
+    //if search button clicked, search for UPC   
+    public void onSearchClick(View v)
+    {
+    	try {
+    		 Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+    		 Log.d("Search Interwebz: ", scannedinfo);
+             intent.putExtra(SearchManager.QUERY, scannedinfo);
+             startActivity(intent);
+		} catch (Exception e) {
+			
+			// TODO: handle exception
+		}
+    	
+    }
     
     private void start(){
     	
-
+    	Log.i("Status", "Starting function");
         autoFocusHandler = new Handler();
         mCamera = getCameraInstance();
 
@@ -90,14 +104,13 @@ public class CameraScanActivity extends Activity
 
     public void onPause() {
         super.onPause();
+      
+        Log.i("Status", "Pausin");
         releaseCamera();
     }
 
-   public void onResume(){
-	   super.onResume();
-	   mCamera = Camera.open();
-   }
-  
+   
+    
     
   
     
@@ -117,10 +130,12 @@ public class CameraScanActivity extends Activity
     
     private void releaseCamera() {
         if (mCamera != null) {
+        	Log.i("Status", "Camera Release Start");
             previewing = false;
             mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
+            Log.i("Status", "Camera Release Stop");
         }
     }
 
@@ -167,18 +182,5 @@ public class CameraScanActivity extends Activity
         };
         
         
-     //if search button clicked, search for UPC   
-    public void onSearchClick(View v)
-    {
-    	try {
-    		 Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-             //String term = editTextInput.getText().toString();
-    		 Log.d("Search Interwebz: ", scannedinfo);
-             intent.putExtra(SearchManager.QUERY, scannedinfo);
-             startActivity(intent);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-    	
-    }
+    
 }
