@@ -115,7 +115,7 @@ public class JSONParser {
 					Log.d("StatusPost", httpEntity.toString());
 
 					is = httpEntity.getContent();
-					
+
 				} catch (HttpHostConnectException e) {
 					Log.e("Network Error ", e.getLocalizedMessage(), e);
 

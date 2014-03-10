@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/blue_gradient"
+        android:background="@drawable/custome"
         android:orientation="horizontal" >
 
         <TextView
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/blue_gradient"
+        android:background="@drawable/custome"
         android:orientation="horizontal"
         android:weightSum="2" android:baselineAligned="false">
 

@@ -21,17 +21,15 @@ public class Splash extends Activity {// public means accessible by other//class
 		Thread logoTimer = new Thread() {// to multitask
 			public void run() {
 				try {
-					sleep(1);// 1000=one sec
+					sleep(1000);// 1000=one sec
 					// transition from splash to main men
 					overridePendingTransition(R.anim.activityfadein,
 							R.anim.activityfadeout);
-					Intent menuIntent = new Intent(
-							"com.ece480.upcitem.Meanu");
+					Intent menuIntent = new Intent("com.ece480.upcitem.Meanu");
 					startActivity(menuIntent);
 				}// end try
 
 				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}// end catch
 
@@ -45,9 +43,8 @@ public class Splash extends Activity {// public means accessible by other//class
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		
+
 	}
 
 }

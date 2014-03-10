@@ -3,8 +3,8 @@
     package="com.ece480.upcitem"
     android:versionCode="1"
     android:versionName="1.0" >
-	
-	<uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -14,16 +14,17 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/upc"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <!-- SplashActivity -->
         <activity
             android:name=".Splash"
@@ -36,57 +37,29 @@
             </intent-filter>
         </activity>
 
-        
         <!-- MenuActiviy -->
         <activity
             android:name=".Meanu"
             android:label="@string/app_name"
             android:theme="@style/AppBaseTheme" >
             <intent-filter>
-                <action android:name="com.ece480.upcitem.Meanu" /> <!-- description name to be referred in java -->
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        
-        
-        <!-- SettingsActivity -->
-        <activity
-            android:name=".Setting"
-            android:label="@string/app_name"
-            android:theme="@style/AppBaseTheme" >
-            <intent-filter>
-                <action android:name="com.ece480.upcitem.Setting" /> <!-- description name to be referred in java -->
+                <action android:name="com.ece480.upcitem.Meanu" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <!-- AboutActivity -->
-        <activity
-            android:name=".About"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Dialog" >
-            <intent-filter>
-                <action android:name="com.ece480.upcitem.About" /> <!-- description name to be referred in java -->
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-     
-        
-        
         <!-- ScanningActivity -->
         <activity
             android:name=".CameraScanActivity"
             android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="com.ece480.upcitem.CameraScanActivity" /> <!-- description name to be referred in java -->
+                <action android:name="com.ece480.upcitem.CameraScanActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-         
+
         <!-- ResultActivity -->
         <activity
             android:name=".Result"
@@ -97,10 +70,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-        
-       
-       
     </application>
 
 </manifest>

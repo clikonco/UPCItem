@@ -9,12 +9,8 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +28,7 @@ public class Result extends ListActivity {
 	// php read comments script
 	private TextView tv;
 	public String UPC;
-	private String dynamic= "192.168.2.29";
+	private String dynamic = "192.168.2.29";// IP ADDRESS OF DB
 	// JSON IDS:
 	private static final String TAG_POSTS = "posts";
 	private static final String TAG_SUCCESS = "success";
@@ -43,13 +39,6 @@ public class Result extends ListActivity {
 	private static final String TAG_Frys = "Frys";
 	private static final String TAG_Ebay = "Ebay";
 	private static final String TAG_Other = "Other";
-	// it's important to note that the message is both in the parent branch of
-	// our JSON tree that displays a "Post Available" or a "No Post Available"
-	// message,
-	// and there is also a message for each individual post, listed under the
-	// "posts"
-	// category, that displays what the user typed as their message.
-	String title = null;
 	// An array of all of our comments
 	private JSONArray mComments = null;
 	// manages all of our comments in a list.
@@ -60,31 +49,23 @@ public class Result extends ListActivity {
 		super.onCreate(savedInstanceState);
 		// note that use read_comments.xml instead of our single_post.xml
 		setContentView(R.layout.forum);
-		tv = (TextView) findViewById(R.id.forumtitle);		
-		PRODUCT_URL = "http://" + dynamic
-				+ "/webservice/itemsearch.php?UPC=";
-		
-		
+		tv = (TextView) findViewById(R.id.forumtitle);
+		PRODUCT_URL = "http://" + dynamic + "/webservice/itemsearch.php?UPC=";
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-		    UPC = extras.getString("UPC");
-		    Log.i("Getting Info from Prev Activity:",UPC);
+			UPC = extras.getString("UPC");
+			Log.i("Getting Info from Prev Activity:", UPC);
 		}
-		
-	
 
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		// loading the comments via AsyncTask
 		new LoadComments().execute();
 	}
-
-
-
 
 	/**
 	 * Retrieves recent post data from the server.
@@ -92,66 +73,46 @@ public class Result extends ListActivity {
 	public void updateJSONdata() {
 
 		// Instantiate the arraylist to contain all the JSON data.
-		// we are going to use a bunch of key-value pairs, referring
-		// to the json element name, and the content, for example,
-		// message it the tag, and "I'm awesome" as the content..
 
 		mCommentList = new ArrayList<HashMap<String, String>>();
-		Log.i("STATUS: ","Before JSON PARSER");
-		// Bro, it's time to power up the J parser
+		Log.i("STATUS: ", "Before JSON PARSER");
 		JSONParser jParser = new JSONParser();
-		Log.i("STATUS: ","After JSON PARSER");
-		// Feed the beast our comments url, and it spits us
-		// back a JSON object. Boo-yeah Jerome.
-	
-		if (UPC == null)
-		{
+		Log.i("STATUS: ", "After JSON PARSER");
+
+		if (UPC == null) {
 			UPC = "1";
 		}
 		Log.e("FORUM_COMMENTS_URL", PRODUCT_URL + UPC);
 		JSONObject json = jParser.getJSONFromUrl(PRODUCT_URL + UPC);
 
-		// when parsing JSON stuff, we should probably
-		// try to catch any exceptions:
 		try {
-
-			// I know I said we would check if "Posts were Avail." (success==1)
-			// before we tried to read the individual posts, but I lied...
-			// mComments will tell us how many "posts" or comments are
-			// available
 			mComments = json.getJSONArray(TAG_POSTS);
-			/*if(mComments.length()==0)
-			{
-				
-			}*/
 			// looping through all posts according to the json object returned
 			for (int i = 0; i < mComments.length(); i++) {
-				JSONObject c = mComments.getJSONObject(i);				
-				
-				
-				String ProductName = c.getString(TAG_ProductName );
-				String UPC = c.getString(TAG_UPC );
-				String id = c.getString(TAG_id );
-				String Amazon = c.getString(TAG_Amazon );
-				String Frys = c.getString(TAG_Frys );
-				String Ebay = c.getString(TAG_Ebay );
-				String Other = c.getString(TAG_Other );
+				JSONObject c = mComments.getJSONObject(i);
+
+				String ProductName = c.getString(TAG_ProductName);
+				String UPC = c.getString(TAG_UPC);
+				String id = c.getString(TAG_id);
+				String Amazon = c.getString(TAG_Amazon);
+				String Frys = c.getString(TAG_Frys);
+				String Ebay = c.getString(TAG_Ebay);
+				String Other = c.getString(TAG_Other);
 
 				// creating new HashMap
 				HashMap<String, String> map = new HashMap<String, String>();
 
-				map.put(TAG_ProductName , ProductName);
-				map.put(TAG_UPC , UPC);
-				map.put(TAG_id , id);
-				map.put(TAG_Amazon , Amazon);
-				map.put(TAG_Frys , Frys);
-				map.put(TAG_Ebay , Ebay);
-				map.put(TAG_Other , Other);
+				map.put(TAG_ProductName, ProductName);
+				map.put(TAG_UPC, UPC);
+				map.put(TAG_id, id);
+				map.put(TAG_Amazon, Amazon);
+				map.put(TAG_Frys, Frys);
+				map.put(TAG_Ebay, Ebay);
+				map.put(TAG_Other, Other);
 
 				// adding HashList to ArrayList
 				mCommentList.add(map);
-				
-			
+
 			}
 
 		} catch (JSONException e) {
@@ -164,37 +125,19 @@ public class Result extends ListActivity {
 	 * Inserts the parsed data into the listview.
 	 */
 	private void updateList() {
-		// For a ListActivity we need to set the List Adapter, and in order to
-		// do
-		// that, we need to create a ListAdapter. This SimpleAdapter,
-		// will utilize our updated Hashmapped ArrayList,
-		// use our single_post xml template for each item in our list,
-		// and place the appropriate info from the list to the
-		// correct GUI id. Order is important here.
-		/*ListAdapter adapter = new SimpleAdapter(this, mCommentList,
-				R.layout.forum_single, new String[] { TAG_TITLE, TAG_MESSAGE,
-						TAG_USERNAME }, new int[] { R.id.title, R.id.message,
-						R.id.username });
-		*/
 		ListAdapter adapter = new SimpleAdapter(this, mCommentList,
-				R.layout.forum_single, new String[] { TAG_ProductName ,TAG_UPC ,TAG_Amazon ,TAG_Frys ,TAG_Ebay ,TAG_Other  }, 
-				new int[] { R.id.ProductName,R.id.UPC,R.id.Amazon,R.id.Frys,R.id.Ebay,R.id.Other });
-		// I shouldn't have to comment on this one:
+				R.layout.forum_single, new String[] { TAG_ProductName, TAG_UPC,
+						TAG_Amazon, TAG_Frys, TAG_Ebay, TAG_Other }, new int[] {
+						R.id.ProductName, R.id.UPC, R.id.Amazon, R.id.Frys,
+						R.id.Ebay, R.id.Other });
 		setListAdapter(adapter);
 
-		// Optional: when the user clicks a list item we
-		// could do something. However, we will choose
-		// to do nothing...
 		ListView lv = getListView();
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
-				// This method is triggered if an item is click within our
-				// list. For our example we won't be using this, but
-				// it is useful to know in real life applications.
 
 			}
 		});
