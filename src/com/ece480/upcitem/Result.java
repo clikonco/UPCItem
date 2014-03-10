@@ -28,17 +28,21 @@ public class Result extends ListActivity {
 
 	// Progress Dialog
 	private ProgressDialog pDialog;
-	private String FORUM_COMMENTS_URL, dynamic;
+	private String PRODUCT_URL;
 	// php read comments script
 	private TextView tv;
-
+	public String UPC;
+	private String dynamic= "192.168.2.29";
 	// JSON IDS:
-	private static final String TAG_SUCCESS = "success";
-	private static final String TAG_TITLE = "title";
 	private static final String TAG_POSTS = "posts";
-	private static final String TAG_POST_ID = "post_id";
-	private static final String TAG_USERNAME = "username";
-	private static final String TAG_MESSAGE = "message";
+	private static final String TAG_SUCCESS = "success";
+	private static final String TAG_ProductName = "ProductName";
+	private static final String TAG_UPC = "UPC";
+	private static final String TAG_id = "id";
+	private static final String TAG_Amazon = "Amazon";
+	private static final String TAG_Frys = "Frys";
+	private static final String TAG_Ebay = "Ebay";
+	private static final String TAG_Other = "Other";
 	// it's important to note that the message is both in the parent branch of
 	// our JSON tree that displays a "Post Available" or a "No Post Available"
 	// message,
@@ -56,19 +60,18 @@ public class Result extends ListActivity {
 		super.onCreate(savedInstanceState);
 		// note that use read_comments.xml instead of our single_post.xml
 		setContentView(R.layout.forum);
-		tv = (TextView) findViewById(R.id.forumtitle);
-		dynamic = getDefaults("IPADDRESS", this);
-		FORUM_COMMENTS_URL = "http://" + dynamic
-				+ "/webservice/forumcomments.php?title=";
-
+		tv = (TextView) findViewById(R.id.forumtitle);		
+		PRODUCT_URL = "http://" + dynamic
+				+ "/webservice/itemsearch.php?UPC=";
 		
-		Log.d("URL:", FORUM_COMMENTS_URL);
-
-		Intent i = getIntent();
-		title = i.getStringExtra("title");
-		tv.setText(title + " Topic");
-
-		Log.d("Received titlefromintent: ", title);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+		    UPC = extras.getString("UPC");
+		    Log.i("Getting Info from Prev Activity:",UPC);
+		}
+		
+	
 
 	}
 
@@ -80,21 +83,8 @@ public class Result extends ListActivity {
 		new LoadComments().execute();
 	}
 
-	public void addComment(View v) {
-		Intent i = new Intent(Result.this, AddCommentReplies.class);
 
-		i.putExtra("title", title);
-		Log.e("title before addcommentreply", title);
-		startActivity(i);
 
-	}
-
-	// to get shared preferences
-	public static String getDefaults(String key, Context context) {
-		SharedPreferences sp = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return sp.getString(key, null);
-	}
 
 	/**
 	 * Retrieves recent post data from the server.
@@ -107,17 +97,19 @@ public class Result extends ListActivity {
 		// message it the tag, and "I'm awesome" as the content..
 
 		mCommentList = new ArrayList<HashMap<String, String>>();
-
+		Log.i("STATUS: ","Before JSON PARSER");
 		// Bro, it's time to power up the J parser
 		JSONParser jParser = new JSONParser();
+		Log.i("STATUS: ","After JSON PARSER");
 		// Feed the beast our comments url, and it spits us
 		// back a JSON object. Boo-yeah Jerome.
-
-		String titlemod = title.replace(" ", "");
-		titlemod = titlemod.trim();
-
-		Log.e("FORUM_COMMENTS_URL", FORUM_COMMENTS_URL + title);
-		JSONObject json = jParser.getJSONFromUrl(FORUM_COMMENTS_URL + titlemod);
+	
+		if (UPC == null)
+		{
+			UPC = "1";
+		}
+		Log.e("FORUM_COMMENTS_URL", PRODUCT_URL + UPC);
+		JSONObject json = jParser.getJSONFromUrl(PRODUCT_URL + UPC);
 
 		// when parsing JSON stuff, we should probably
 		// try to catch any exceptions:
@@ -133,17 +125,24 @@ public class Result extends ListActivity {
 			for (int i = 0; i < mComments.length(); i++) {
 				JSONObject c = mComments.getJSONObject(i);
 
-				// gets the content of each tag
-				String title = c.getString(TAG_TITLE);
-				String content = c.getString(TAG_MESSAGE);
-				String username = c.getString(TAG_USERNAME);
+				String ProductName = c.getString(TAG_ProductName );
+				String UPC = c.getString(TAG_UPC );
+				String id = c.getString(TAG_id );
+				String Amazon = c.getString(TAG_Amazon );
+				String Frys = c.getString(TAG_Frys );
+				String Ebay = c.getString(TAG_Ebay );
+				String Other = c.getString(TAG_Other );
 
 				// creating new HashMap
 				HashMap<String, String> map = new HashMap<String, String>();
 
-				map.put(TAG_TITLE, title);
-				map.put(TAG_MESSAGE, content);
-				map.put(TAG_USERNAME, username);
+				map.put(TAG_ProductName , ProductName);
+				map.put(TAG_UPC , UPC);
+				map.put(TAG_id , id);
+				map.put(TAG_Amazon , Amazon);
+				map.put(TAG_Frys , Frys);
+				map.put(TAG_Ebay , Ebay);
+				map.put(TAG_Other , Other);
 
 				// adding HashList to ArrayList
 				mCommentList.add(map);
@@ -168,11 +167,14 @@ public class Result extends ListActivity {
 		// use our single_post xml template for each item in our list,
 		// and place the appropriate info from the list to the
 		// correct GUI id. Order is important here.
-		ListAdapter adapter = new SimpleAdapter(this, mCommentList,
+		/*ListAdapter adapter = new SimpleAdapter(this, mCommentList,
 				R.layout.forum_single, new String[] { TAG_TITLE, TAG_MESSAGE,
 						TAG_USERNAME }, new int[] { R.id.title, R.id.message,
 						R.id.username });
-
+		*/
+		ListAdapter adapter = new SimpleAdapter(this, mCommentList,
+				R.layout.forum_single, new String[] { TAG_ProductName ,TAG_UPC ,TAG_Amazon ,TAG_Frys ,TAG_Ebay ,TAG_Other  }, 
+				new int[] { R.id.ProductName,R.id.UPC,R.id.Amazon,R.id.Frys,R.id.Ebay,R.id.Other });
 		// I shouldn't have to comment on this one:
 		setListAdapter(adapter);
 
@@ -200,7 +202,7 @@ public class Result extends ListActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(Result.this);
-			pDialog.setMessage("Loading Comments...");
+			pDialog.setMessage("Loading Items...");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(true);
 			pDialog.show();

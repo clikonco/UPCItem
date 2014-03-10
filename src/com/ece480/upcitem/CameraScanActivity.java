@@ -70,7 +70,22 @@ public class CameraScanActivity extends Activity
 		}
     	
     }
-    
+
+    //if search button clicked, search for UPC   
+    public void onSaveClick(View v)
+    {
+    	try {
+    		Intent intent = new Intent(getBaseContext(), Result.class);
+    		scannedinfo = "644890280151";
+    		intent.putExtra("UPC", scannedinfo);
+    		Log.i("Adding Values for Next Activity:",scannedinfo);
+    		startActivity(intent);
+		} catch (Exception e) {
+			
+			// TODO: handle exception
+		}
+    	
+    }
     private void start(){
     	
     	Log.i("Status", "Starting function");
@@ -133,6 +148,7 @@ public class CameraScanActivity extends Activity
         	Log.i("Status", "Camera Release Start");
             previewing = false;
             mCamera.setPreviewCallback(null);
+            mPreview.getHolder().removeCallback(mPreview);
             mCamera.release();
             mCamera = null;
             Log.i("Status", "Camera Release Stop");

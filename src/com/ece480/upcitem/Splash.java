@@ -21,7 +21,7 @@ public class Splash extends Activity {// public means accessible by other//class
 		Thread logoTimer = new Thread() {// to multitask
 			public void run() {
 				try {
-					sleep(1000);// 1000=one sec
+					sleep(1);// 1000=one sec
 					// transition from splash to main men
 					overridePendingTransition(R.anim.activityfadein,
 							R.anim.activityfadeout);

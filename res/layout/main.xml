@@ -19,14 +19,20 @@
     android:layout_width="match_parent">
   </TextView>
 
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center_vertical" >
+      
   <Button
     android:id="@+id/ScanButton"
     android:text="Scan"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-  />
-  
+  />  
+
   <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -34,5 +40,15 @@
         android:text="Search"
         android:layout_gravity="center"
         android:onClick="onSearchClick"
-        android:layout_marginTop="10dp" />
+        />
+ 
+  <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Store"
+        android:layout_gravity="center"
+        android:onClick="onSaveClick"
+        />
+  </LinearLayout>
 </LinearLayout>

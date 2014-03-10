@@ -37,7 +37,7 @@
         </activity>
 
         
-        <!-- SettingsActivity -->
+        <!-- MenuActiviy -->
         <activity
             android:name=".Meanu"
             android:label="@string/app_name"
@@ -62,7 +62,7 @@
             </intent-filter>
         </activity>
 
-        <!-- MenusofkeyActivity -->
+        <!-- AboutActivity -->
         <activity
             android:name=".About"
             android:label="@string/app_name"
@@ -87,6 +87,18 @@
             </intent-filter>
         </activity>
          
+        <!-- ResultActivity -->
+        <activity
+            android:name=".Result"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.ece480.upcitem.Result" /> <!-- description name to be referred in java -->
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
        
        
     </application>
