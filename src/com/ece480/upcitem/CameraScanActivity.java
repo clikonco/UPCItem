@@ -76,7 +76,7 @@ public class CameraScanActivity extends Activity
     {
     	try {
     		Intent intent = new Intent(getBaseContext(), Result.class);
-    		scannedinfo = "644890280151";
+    		
     		intent.putExtra("UPC", scannedinfo);
     		Log.i("Adding Values for Next Activity:",scannedinfo);
     		startActivity(intent);
@@ -193,7 +193,7 @@ public class CameraScanActivity extends Activity
     // Mimic continuous auto-focusing
     AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
             public void onAutoFocus(boolean success, Camera camera) {
-                autoFocusHandler.postDelayed(doAutoFocus, 1000);
+                autoFocusHandler.postDelayed(doAutoFocus, 2000);
             }
         };
         

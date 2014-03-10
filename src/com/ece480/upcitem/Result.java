@@ -120,11 +120,15 @@ public class Result extends ListActivity {
 			// mComments will tell us how many "posts" or comments are
 			// available
 			mComments = json.getJSONArray(TAG_POSTS);
-
+			/*if(mComments.length()==0)
+			{
+				
+			}*/
 			// looping through all posts according to the json object returned
 			for (int i = 0; i < mComments.length(); i++) {
-				JSONObject c = mComments.getJSONObject(i);
-
+				JSONObject c = mComments.getJSONObject(i);				
+				
+				
 				String ProductName = c.getString(TAG_ProductName );
 				String UPC = c.getString(TAG_UPC );
 				String id = c.getString(TAG_id );
@@ -146,13 +150,13 @@ public class Result extends ListActivity {
 
 				// adding HashList to ArrayList
 				mCommentList.add(map);
-
-				// annndddd, our JSON data is up to date same with our array
-				// list
+				
+			
 			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
+			Log.i("STATUS", "NO PRODUCTS FOUND");
 		}
 	}
 
